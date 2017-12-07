@@ -30,7 +30,12 @@ public class MainActivity extends Activity {
         View videoSelectionButton = findViewById(R.id.button_video_selection);
         View audioSelectionButton = findViewById(R.id.button_audio_selection);
         View subtitleSelectionButton = findViewById(R.id.button_subtitle_selection);
+        View scaleInButton = findViewById(R.id.button_scale_in);
+        View scaleOutButton = findViewById(R.id.button_scale_out);
         ControllerView controllerView = findViewById(R.id.controller_view);
+
+        ScalingShiz scalingShiz = new ScalingShiz(scaleInButton, scaleOutButton, playerView.getContainerView());
+        scalingShiz.bindScaleButtonsToScaleActions();
 
         videoSelectionButton.setOnClickListener(showVideoSelectionDialog);
         audioSelectionButton.setOnClickListener(showAudioSelectionDialog);

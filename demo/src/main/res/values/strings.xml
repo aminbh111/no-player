@@ -6,6 +6,8 @@
   <string name="video">Video</string>
   <string name="audio">Audio</string>
   <string name="subtitle">Subtitle</string>
+  <string name="scale_in">Scale 0.5x</string>
+  <string name="scale_out">Scale 1x</string>
 
   <string name="content_description_play_pause">Play/pause</string>
 

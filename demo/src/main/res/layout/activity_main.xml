@@ -1,52 +1,66 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android">
 
-  <LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-
     <LinearLayout
-      style="?android:attr/buttonBarStyle"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:orientation="horizontal">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-      <Button
-        android:id="@+id/button_video_selection"
-        style="?android:attr/buttonBarButtonStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/video" />
+        <LinearLayout
+            style="?android:attr/buttonBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-      <Button
-        android:id="@+id/button_audio_selection"
-        style="?android:attr/buttonBarButtonStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/audio" />
+            <Button
+                android:id="@+id/button_video_selection"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/video" />
 
-      <Button
-        android:id="@+id/button_subtitle_selection"
-        style="?android:attr/buttonBarButtonStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/subtitle" />
+            <Button
+                android:id="@+id/button_audio_selection"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/audio" />
+
+            <Button
+                android:id="@+id/button_subtitle_selection"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/subtitle" />
+
+            <Button
+                android:id="@+id/button_scale_in"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/scale_in" />
+
+            <Button
+                android:id="@+id/button_scale_out"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/scale_out" />
+
+        </LinearLayout>
+
+        <com.novoda.noplayer.NoPlayerView
+            android:id="@+id/player_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+
+        <com.novoda.demo.AndroidControllerView
+            android:id="@+id/controller_view"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/controller_view_height"
+            android:layout_gravity="bottom" />
 
     </LinearLayout>
-
-    <com.novoda.noplayer.NoPlayerView
-      android:id="@+id/player_view"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_gravity="center" />
-
-    <com.novoda.demo.AndroidControllerView
-      android:id="@+id/controller_view"
-      android:layout_width="match_parent"
-      android:layout_height="@dimen/controller_view_height"
-      android:layout_gravity="bottom" />
-
-  </LinearLayout>
 
 </merge>
