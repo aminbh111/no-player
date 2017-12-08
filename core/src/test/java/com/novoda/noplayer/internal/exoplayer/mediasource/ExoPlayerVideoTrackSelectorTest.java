@@ -9,6 +9,7 @@ import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.novoda.noplayer.ContentType;
 import com.novoda.noplayer.internal.exoplayer.RendererTypeRequester;
 import com.novoda.noplayer.model.PlayerVideoTrack;
+import com.novoda.noplayer.model.PlayerVideoTrackFormat;
 import com.novoda.utils.Optional;
 
 import java.util.Arrays;
@@ -32,30 +33,40 @@ import static org.mockito.Mockito.verify;
 public class ExoPlayerVideoTrackSelectorTest {
 
     private static final Format VIDEO_FORMAT = aVideoFormat().withId("id1").build();
-    private static final PlayerVideoTrack PLAYER_VIDEO_TRACK = new PlayerVideoTrack(
-            0,
-            0,
-            VIDEO_FORMAT.id,
-            ContentType.HLS,
-            VIDEO_FORMAT.width,
-            VIDEO_FORMAT.height,
-            (int) VIDEO_FORMAT.frameRate,
-            VIDEO_FORMAT.bitrate
-    );
+
+    private static final PlayerVideoTrackFormat PLAYER_VIDEO_TRACK_FORMAT = new PlayerVideoTrackFormat.Builder()
+            .width(VIDEO_FORMAT.width)
+            .height(VIDEO_FORMAT.height)
+            .bitrate(VIDEO_FORMAT.bitrate)
+            .fps((int) VIDEO_FORMAT.frameRate)
+            .build();
+
+    private static final PlayerVideoTrack PLAYER_VIDEO_TRACK = new PlayerVideoTrack.Builder()
+            .id(VIDEO_FORMAT.id)
+            .groupIndex(0)
+            .formatIndex(0)
+            .contentType(ContentType.HLS)
+            .format(PLAYER_VIDEO_TRACK_FORMAT)
+            .build();
 
     private static final Format ADDITIONAL_VIDEO_FORMAT = aVideoFormat().withId("id2").build();
     private static final int FIRST_GROUP = 0;
     private static final int SECOND_TRACK = 1;
-    private static final PlayerVideoTrack ADDITIONAL_PLAYER_VIDEO_TRACK = new PlayerVideoTrack(
-            FIRST_GROUP,
-            SECOND_TRACK,
-            ADDITIONAL_VIDEO_FORMAT.id,
-            ContentType.HLS,
-            ADDITIONAL_VIDEO_FORMAT.width,
-            ADDITIONAL_VIDEO_FORMAT.height,
-            (int) ADDITIONAL_VIDEO_FORMAT.frameRate,
-            ADDITIONAL_VIDEO_FORMAT.bitrate
-    );
+
+    private static final PlayerVideoTrackFormat ADDITIONAL_PLAYER_VIDEO_TRACK_FORMAT = new PlayerVideoTrackFormat.Builder()
+            .width(ADDITIONAL_VIDEO_FORMAT.width)
+            .height(ADDITIONAL_VIDEO_FORMAT.height)
+            .bitrate(ADDITIONAL_VIDEO_FORMAT.bitrate)
+            .fps((int) ADDITIONAL_VIDEO_FORMAT.frameRate)
+            .build();
+
+    private static final PlayerVideoTrack ADDITIONAL_PLAYER_VIDEO_TRACK = new PlayerVideoTrack.Builder()
+            .id(ADDITIONAL_VIDEO_FORMAT.id)
+            .groupIndex(FIRST_GROUP)
+            .formatIndex(SECOND_TRACK)
+            .contentType(ContentType.HLS)
+            .format(ADDITIONAL_PLAYER_VIDEO_TRACK_FORMAT)
+            .build();
 
     private static final List<PlayerVideoTrack> EXPECTED_TRACKS = Arrays.asList(PLAYER_VIDEO_TRACK, ADDITIONAL_PLAYER_VIDEO_TRACK);
 

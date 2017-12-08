@@ -4,25 +4,18 @@ import com.novoda.noplayer.ContentType;
 
 public class PlayerVideoTrack {
 
+    private final String id;
     private final int groupIndex;
     private final int formatIndex;
-    private final String id;
     private final ContentType contentType;
-    private final int width;
-    private final int height;
-    private final int fps;
-    private final int bitrate;
+    private final PlayerVideoTrackFormat format;
 
-    @SuppressWarnings("checkstyle:ParameterNumber") // TODO group parameters into classes
-    public PlayerVideoTrack(int groupIndex, int formatIndex, String id, ContentType contentType, int width, int height, int fps, int bitrate) {
+    PlayerVideoTrack(String id, int groupIndex, int formatIndex, ContentType contentType, PlayerVideoTrackFormat format) {
+        this.id = id;
         this.groupIndex = groupIndex;
         this.formatIndex = formatIndex;
-        this.id = id;
         this.contentType = contentType;
-        this.width = width;
-        this.height = height;
-        this.fps = fps;
-        this.bitrate = bitrate;
+        this.format = format;
     }
 
     public int groupIndex() {
@@ -42,19 +35,19 @@ public class PlayerVideoTrack {
     }
 
     public int width() {
-        return width;
+        return format.width();
     }
 
     public int height() {
-        return height;
+        return format.height();
     }
 
     public int fps() {
-        return fps;
+        return format.fps();
     }
 
     public int bitrate() {
-        return bitrate;
+        return format.bitrate();
     }
 
     @Override
@@ -74,48 +67,71 @@ public class PlayerVideoTrack {
         if (formatIndex != that.formatIndex) {
             return false;
         }
-        if (width != that.width) {
-            return false;
-        }
-        if (height != that.height) {
-            return false;
-        }
-        if (fps != that.fps) {
-            return false;
-        }
-        if (bitrate != that.bitrate) {
-            return false;
-        }
         if (id != null ? !id.equals(that.id) : that.id != null) {
             return false;
         }
-        return contentType == that.contentType;
+        if (contentType != that.contentType) {
+            return false;
+        }
+        return format != null ? format.equals(that.format) : that.format == null;
     }
 
     @Override
     public int hashCode() {
-        int result = groupIndex;
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + groupIndex;
         result = 31 * result + formatIndex;
-        result = 31 * result + (id != null ? id.hashCode() : 0);
         result = 31 * result + (contentType != null ? contentType.hashCode() : 0);
-        result = 31 * result + width;
-        result = 31 * result + height;
-        result = 31 * result + fps;
-        result = 31 * result + bitrate;
+        result = 31 * result + (format != null ? format.hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
-        return "PlayerVideoTrack{"
-                + "groupIndex=" + groupIndex
-                + ", formatIndex=" + formatIndex
-                + ", id='" + id + '\''
-                + ", contentType=" + contentType
-                + ", width=" + width
-                + ", height=" + height
-                + ", fps=" + fps
-                + ", bitrate=" + bitrate
-                + '}';
+        return "PlayerVideoTrack{" +
+                "id='" + id + '\'' +
+                ", groupIndex=" + groupIndex +
+                ", formatIndex=" + formatIndex +
+                ", contentType=" + contentType +
+                ", format=" + format +
+                '}';
+    }
+
+    public static class Builder {
+        private String id;
+        private int groupIndex;
+        private int formatIndex;
+        private ContentType contentType;
+        private PlayerVideoTrackFormat format;
+
+        public Builder id(String id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder groupIndex(int groupIndex) {
+            this.groupIndex = groupIndex;
+            return this;
+        }
+
+        public Builder formatIndex(int formatIndex) {
+            this.formatIndex = formatIndex;
+            return this;
+        }
+
+        public Builder contentType(ContentType contentType) {
+            this.contentType = contentType;
+            return this;
+        }
+
+        public Builder format(PlayerVideoTrackFormat format) {
+            this.format = format;
+            return this;
+        }
+
+        public PlayerVideoTrack build() {
+            return new PlayerVideoTrack(id, groupIndex, formatIndex, contentType, format);
+        }
+
     }
 }

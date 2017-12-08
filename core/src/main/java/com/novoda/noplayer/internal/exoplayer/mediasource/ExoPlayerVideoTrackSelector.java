@@ -9,6 +9,7 @@ import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.novoda.noplayer.ContentType;
 import com.novoda.noplayer.internal.exoplayer.RendererTypeRequester;
 import com.novoda.noplayer.model.PlayerVideoTrack;
+import com.novoda.noplayer.model.PlayerVideoTrackFormat;
 import com.novoda.utils.Optional;
 
 import java.util.ArrayList;
@@ -48,16 +49,20 @@ public class ExoPlayerVideoTrackSelector {
             for (int formatIndex = 0; formatIndex < trackGroup.length; formatIndex++) {
                 Format format = trackGroup.getFormat(formatIndex);
 
-                PlayerVideoTrack playerVideoTrack = new PlayerVideoTrack(
-                        groupIndex,
-                        formatIndex,
-                        format.id,
-                        contentType,
-                        format.width,
-                        format.height,
-                        (int) format.frameRate,
-                        format.bitrate
-                );
+                PlayerVideoTrackFormat playerVideoTrackFormat = new PlayerVideoTrackFormat.Builder()
+                        .width(format.width)
+                        .height(format.height)
+                        .fps((int) format.frameRate)
+                        .bitrate(format.bitrate)
+                        .build();
+
+                PlayerVideoTrack playerVideoTrack = new PlayerVideoTrack.Builder()
+                        .id(format.id)
+                        .groupIndex(groupIndex)
+                        .formatIndex(formatIndex)
+                        .contentType(contentType)
+                        .format(playerVideoTrackFormat)
+                        .build();
 
                 videoTracks.add(playerVideoTrack);
             }
