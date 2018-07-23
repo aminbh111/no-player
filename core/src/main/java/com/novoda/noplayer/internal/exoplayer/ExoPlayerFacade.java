@@ -7,6 +7,7 @@ import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.audio.AudioAttributes;
 import com.google.android.exoplayer2.mediacodec.MediaCodecSelector;
+import com.google.android.exoplayer2.source.ConcatenatingMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.novoda.noplayer.Options;
@@ -43,7 +44,7 @@ class ExoPlayerFacade {
     @Nullable
     private Options options;
     @Nullable
-    private MediaSource mediaSource;
+    private ConcatenatingMediaSource concatenatingMediaSource;
 
     ExoPlayerFacade(AndroidDeviceVersion androidDeviceVersion,
                     MediaSourceFactory mediaSourceFactory,
@@ -129,14 +130,14 @@ class ExoPlayerFacade {
 
         setMovieAudioAttributes(exoPlayer);
 
-        mediaSource = mediaSourceFactory.create(
+        concatenatingMediaSource = mediaSourceFactory.createConcatenatingMediaSource(
                 options,
                 uri,
                 forwarder.mediaSourceEventListener(),
                 bandwidthMeter
         );
         attachToSurface(playerSurfaceHolder);
-        exoPlayer.prepare(mediaSource, RESET_POSITION, DO_NOT_RESET_STATE);
+        exoPlayer.prepare(concatenatingMediaSource, RESET_POSITION, DO_NOT_RESET_STATE);
     }
 
     public void addTrack(Options options,
@@ -152,6 +153,7 @@ class ExoPlayerFacade {
                 forwarder.mediaSourceEventListener(),
                 bandwidthMeter
         );
+        concatenatingMediaSource.addMediaSource(mediaSource);
     }
 
     private void setMovieAudioAttributes(SimpleExoPlayer exoPlayer) {

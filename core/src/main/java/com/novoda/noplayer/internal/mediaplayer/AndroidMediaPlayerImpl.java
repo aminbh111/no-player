@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.View;
+
 import com.novoda.noplayer.Listeners;
 import com.novoda.noplayer.NoPlayer;
 import com.novoda.noplayer.Options;
@@ -237,6 +238,11 @@ class AndroidMediaPlayerImpl implements NoPlayer {
                 mediaPlayer.prepareVideo(uri, surface);
             }
         });
+    }
+
+    @Override
+    public void addTrack(Uri uri, Options options) {
+        // TODO: Implement a version for this?
     }
 
     private void createSurfaceByShowingVideoContainer() {

@@ -78,6 +78,8 @@ public interface NoPlayer extends PlayerState {
      */
     void loadVideo(Uri uri, Options options) throws IllegalStateException;
 
+    void addTrack(Uri uri, Options options);
+
     /**
      * Loads the video content and triggers the {@link NoPlayer.PreparedListener}.
      *

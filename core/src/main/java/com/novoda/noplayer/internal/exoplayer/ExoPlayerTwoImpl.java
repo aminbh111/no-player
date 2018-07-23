@@ -205,6 +205,11 @@ class ExoPlayerTwoImpl implements NoPlayer {
         createSurfaceByShowingVideoContainer();
     }
 
+    @Override
+    public void addTrack(Uri uri, Options options) {
+        exoPlayer.addTrack(options, uri, forwarder);
+    }
+
     private void assertPlayerViewIsAttached() {
         if (playerView == null) {
             throw new IllegalStateException("A PlayerView must be attached in order to loadVideo");
