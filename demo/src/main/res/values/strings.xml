@@ -6,6 +6,7 @@
   <string name="video">Video</string>
   <string name="audio">Audio</string>
   <string name="subtitle">Subtitle</string>
+  <string name="skip_track">Skip Track</string>
 
   <string name="content_description_play_pause">Play/pause</string>
 

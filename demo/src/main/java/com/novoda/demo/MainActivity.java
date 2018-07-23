@@ -16,7 +16,7 @@ import com.novoda.noplayer.PlayerView;
 import com.novoda.noplayer.internal.utils.NoPlayerLog;
 
 public class MainActivity extends Activity {
-    
+
     private static final String URI_VIDEO_WIDEVINE_EXAMPLE_MODULAR_MPD = "https://storage.googleapis.com/content-samples/multi-audio/manifest.mpd";
     private static final String EXAMPLE_MODULAR_LICENSE_SERVER_PROXY = "https://proxy.uat.widevine.com/proxy?provider=widevine_test";
     private static final int HALF_A_SECOND_IN_MILLIS = 500;
@@ -35,11 +35,13 @@ public class MainActivity extends Activity {
         View videoSelectionButton = findViewById(R.id.button_video_selection);
         View audioSelectionButton = findViewById(R.id.button_audio_selection);
         View subtitleSelectionButton = findViewById(R.id.button_subtitle_selection);
+        View skipTrackButton = findViewById(R.id.button_skip_track);
         ControllerView controllerView = findViewById(R.id.controller_view);
 
         videoSelectionButton.setOnClickListener(showVideoSelectionDialog);
         audioSelectionButton.setOnClickListener(showAudioSelectionDialog);
         subtitleSelectionButton.setOnClickListener(showSubtitleSelectionDialog);
+        skipTrackButton.setOnClickListener(skipTrack);
 
         DataPostingModularDrm drmHandler = new DataPostingModularDrm(EXAMPLE_MODULAR_LICENSE_SERVER_PROXY);
 
@@ -99,6 +101,13 @@ public class MainActivity extends Activity {
             } else {
                 dialogCreator.showSubtitleSelectionDialog();
             }
+        }
+    };
+
+    private final View.OnClickListener skipTrack = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            player.skipTrack();
         }
     };
 
