@@ -2,13 +2,17 @@ package com.novoda.demo;
 
 import android.net.Uri;
 
+import com.novoda.noplayer.ContentType;
 import com.novoda.noplayer.Listeners;
 import com.novoda.noplayer.NoPlayer;
 import com.novoda.noplayer.Options;
+import com.novoda.noplayer.OptionsBuilder;
 import com.novoda.noplayer.PlayerState;
 import com.novoda.noplayer.PlayerView;
 
 class DemoPresenter {
+
+    private static final String ADDITIONAL_TRACK = "https://storage.googleapis.com/exoplayer-test-media-1/gen-3/screens/dash-vod-single-segment/video-137.mp4";
 
     private final ControllerView controllerView;
     private final NoPlayer noPlayer;
@@ -33,6 +37,7 @@ class DemoPresenter {
 
         noPlayer.attach(playerView);
         noPlayer.loadVideo(uri, options);
+        noPlayer.addTrack(Uri.parse(ADDITIONAL_TRACK), new OptionsBuilder().withContentType(ContentType.H264).build());
     }
 
     private final NoPlayer.PreparedListener playOnPrepared = new NoPlayer.PreparedListener() {
