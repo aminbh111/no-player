@@ -3,6 +3,7 @@ package com.novoda.noplayer.internal.exoplayer;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 
+import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.audio.AudioAttributes;
@@ -143,6 +144,7 @@ class ExoPlayerFacade {
     public void addTrack(Options options,
                          Uri uri,
                          ExoPlayerForwarder forwarder) {
+        assertVideoLoaded();
         DefaultBandwidthMeter bandwidthMeter = new DefaultBandwidthMeter.Builder()
                 .setInitialBitrateEstimate(options.maxInitialBitrate())
                 .build();
@@ -154,6 +156,20 @@ class ExoPlayerFacade {
                 bandwidthMeter
         );
         concatenatingMediaSource.addMediaSource(mediaSource);
+    }
+
+    public void seekTo(int trackIndex, long positionInMillis) {
+        assertVideoLoaded();
+        exoPlayer.seekTo(trackIndex, positionInMillis);
+    }
+
+    public void skipTrack() {
+        assertVideoLoaded();
+        int nextWindowIndex = exoPlayer.getNextWindowIndex();
+        if (nextWindowIndex == C.INDEX_UNSET) {
+            return;
+        }
+        exoPlayer.seekTo(nextWindowIndex, 0);
     }
 
     private void setMovieAudioAttributes(SimpleExoPlayer exoPlayer) {

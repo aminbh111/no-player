@@ -170,6 +170,11 @@ class ExoPlayerTwoImpl implements NoPlayer {
     }
 
     @Override
+    public void seekTo(int trackIndex, long positionInMillis) throws IllegalStateException {
+        exoPlayer.seekTo(trackIndex, positionInMillis);
+    }
+
+    @Override
     public void stop() {
         reset();
         listenersHolder.getStateChangedListeners().onVideoStopped();
@@ -208,6 +213,11 @@ class ExoPlayerTwoImpl implements NoPlayer {
     @Override
     public void addTrack(Uri uri, Options options) {
         exoPlayer.addTrack(options, uri, forwarder);
+    }
+
+    @Override
+    public void skipTrack() {
+        exoPlayer.skipTrack();
     }
 
     private void assertPlayerViewIsAttached() {

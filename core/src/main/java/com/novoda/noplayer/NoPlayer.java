@@ -58,6 +58,8 @@ public interface NoPlayer extends PlayerState {
      */
     void seekTo(long positionInMillis) throws IllegalStateException;
 
+    void seekTo(int trackIndex, long positionInMillis) throws IllegalStateException;
+
     /**
      * Stops playback of content and then requires call to {@link NoPlayer#loadVideo(Uri, Options)} to continue playback.
      */
@@ -79,6 +81,8 @@ public interface NoPlayer extends PlayerState {
     void loadVideo(Uri uri, Options options) throws IllegalStateException;
 
     void addTrack(Uri uri, Options options);
+
+    void skipTrack();
 
     /**
      * Loads the video content and triggers the {@link NoPlayer.PreparedListener}.

@@ -215,6 +215,11 @@ class AndroidMediaPlayerImpl implements NoPlayer {
     }
 
     @Override
+    public void seekTo(int trackIndex, long positionInMillis) throws IllegalStateException {
+        // TODO: delegate and throw not implemented exception on facade.
+    }
+
+    @Override
     public void pause() throws IllegalStateException {
         mediaPlayer.pause();
         if (heart.isBeating()) {
@@ -242,7 +247,12 @@ class AndroidMediaPlayerImpl implements NoPlayer {
 
     @Override
     public void addTrack(Uri uri, Options options) {
-        // TODO: Implement a version for this?
+        // TODO: delegate and throw not implemented exception on facade.
+    }
+
+    @Override
+    public void skipTrack() {
+        // TODO: delegate and throw not implemented exception on facade.
     }
 
     private void createSurfaceByShowingVideoContainer() {
