@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Handler;
 
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
+import com.google.android.exoplayer2.source.ConcatenatingMediaSource;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.MediaSourceEventListener;
@@ -29,18 +30,26 @@ public class MediaSourceFactory {
                               Uri uri,
                               MediaSourceEventListener mediaSourceEventListener,
                               DefaultBandwidthMeter bandwidthMeter) {
+        ConcatenatingMediaSource concatenatingMediaSource = new ConcatenatingMediaSource();
         DefaultDataSourceFactory defaultDataSourceFactory = new DefaultDataSourceFactory(context, "user-agent", bandwidthMeter);
 
+        MediaSource mediaSource;
         switch (options.contentType()) {
             case HLS:
-                return createHlsMediaSource(defaultDataSourceFactory, uri, mediaSourceEventListener);
+                mediaSource = createHlsMediaSource(defaultDataSourceFactory, uri, mediaSourceEventListener);
+                break;
             case H264:
-                return createH264MediaSource(defaultDataSourceFactory, uri, mediaSourceEventListener);
+                mediaSource = createH264MediaSource(defaultDataSourceFactory, uri, mediaSourceEventListener);
+                break;
             case DASH:
-                return createDashMediaSource(defaultDataSourceFactory, uri, mediaSourceEventListener);
+                mediaSource = createDashMediaSource(defaultDataSourceFactory, uri, mediaSourceEventListener);
+                break;
             default:
                 throw new UnsupportedOperationException("Content type: " + options + " is not supported.");
         }
+
+        concatenatingMediaSource.addMediaSource(mediaSource);
+        return concatenatingMediaSource;
     }
 
     private MediaSource createHlsMediaSource(DefaultDataSourceFactory defaultDataSourceFactory,
