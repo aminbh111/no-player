@@ -25,6 +25,7 @@ public class MainActivity extends Activity {
     private NoPlayer player;
     private DemoPresenter demoPresenter;
     private DialogCreator dialogCreator;
+    private TrackSwitcher trackSwitcher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,13 +36,13 @@ public class MainActivity extends Activity {
         View videoSelectionButton = findViewById(R.id.button_video_selection);
         View audioSelectionButton = findViewById(R.id.button_audio_selection);
         View subtitleSelectionButton = findViewById(R.id.button_subtitle_selection);
-        View skipTrackButton = findViewById(R.id.button_skip_track);
+        View switchTrackButton = findViewById(R.id.button_switch_track);
         ControllerView controllerView = findViewById(R.id.controller_view);
 
         videoSelectionButton.setOnClickListener(showVideoSelectionDialog);
         audioSelectionButton.setOnClickListener(showAudioSelectionDialog);
         subtitleSelectionButton.setOnClickListener(showSubtitleSelectionDialog);
-        skipTrackButton.setOnClickListener(skipTrack);
+        switchTrackButton.setOnClickListener(switchTrack);
 
         DataPostingModularDrm drmHandler = new DataPostingModularDrm(EXAMPLE_MODULAR_LICENSE_SERVER_PROXY);
 
@@ -52,6 +53,7 @@ public class MainActivity extends Activity {
 
         demoPresenter = new DemoPresenter(controllerView, player, player.getListeners(), playerView);
         dialogCreator = new DialogCreator(this, player);
+        trackSwitcher = new TrackSwitcher(player);
 
         player.getListeners().addDroppedVideoFrames(new NoPlayer.DroppedVideoFramesListener() {
             @Override
@@ -59,7 +61,6 @@ public class MainActivity extends Activity {
                 Log.v(getClass().toString(), "dropped frames: " + droppedFrames + " since: " + elapsedMsSinceLastDroppedFrames + "ms");
             }
         });
-
     }
 
     @Override
@@ -104,10 +105,10 @@ public class MainActivity extends Activity {
         }
     };
 
-    private final View.OnClickListener skipTrack = new View.OnClickListener() {
+    private final View.OnClickListener switchTrack = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            player.skipTrack();
+            trackSwitcher.switchTracks();
         }
     };
 
