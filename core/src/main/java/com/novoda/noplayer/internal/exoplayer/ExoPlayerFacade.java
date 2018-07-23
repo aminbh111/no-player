@@ -42,6 +42,8 @@ class ExoPlayerFacade {
     private RendererTypeRequester rendererTypeRequester;
     @Nullable
     private Options options;
+    @Nullable
+    private MediaSource mediaSource;
 
     ExoPlayerFacade(AndroidDeviceVersion androidDeviceVersion,
                     MediaSourceFactory mediaSourceFactory,
@@ -127,7 +129,7 @@ class ExoPlayerFacade {
 
         setMovieAudioAttributes(exoPlayer);
 
-        MediaSource mediaSource = mediaSourceFactory.create(
+        mediaSource = mediaSourceFactory.create(
                 options,
                 uri,
                 forwarder.mediaSourceEventListener(),
@@ -135,6 +137,21 @@ class ExoPlayerFacade {
         );
         attachToSurface(playerSurfaceHolder);
         exoPlayer.prepare(mediaSource, RESET_POSITION, DO_NOT_RESET_STATE);
+    }
+
+    public void addTrack(Options options,
+                         Uri uri,
+                         ExoPlayerForwarder forwarder) {
+        DefaultBandwidthMeter bandwidthMeter = new DefaultBandwidthMeter.Builder()
+                .setInitialBitrateEstimate(options.maxInitialBitrate())
+                .build();
+
+        MediaSource mediaSource = mediaSourceFactory.create(
+                options,
+                uri,
+                forwarder.mediaSourceEventListener(),
+                bandwidthMeter
+        );
     }
 
     private void setMovieAudioAttributes(SimpleExoPlayer exoPlayer) {

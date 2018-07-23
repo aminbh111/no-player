@@ -26,59 +26,58 @@ public class MediaSourceFactory {
         this.handler = handler;
     }
 
+    public ConcatenatingMediaSource createConcatenatingMediaSource(Options options,
+                                                                   Uri uri,
+                                                                   MediaSourceEventListener mediaSourceEventListener,
+                                                                   DefaultBandwidthMeter bandwidthMeter) {
+        ConcatenatingMediaSource concatenatingMediaSource = new ConcatenatingMediaSource();
+        MediaSource mediaSource = create(options, uri, mediaSourceEventListener, bandwidthMeter);
+        concatenatingMediaSource.addMediaSource(mediaSource);
+        return concatenatingMediaSource;
+    }
+
     public MediaSource create(Options options,
                               Uri uri,
                               MediaSourceEventListener mediaSourceEventListener,
                               DefaultBandwidthMeter bandwidthMeter) {
-        ConcatenatingMediaSource concatenatingMediaSource = new ConcatenatingMediaSource();
         DefaultDataSourceFactory defaultDataSourceFactory = new DefaultDataSourceFactory(context, "user-agent", bandwidthMeter);
 
         MediaSource mediaSource;
         switch (options.contentType()) {
             case HLS:
-                mediaSource = createHlsMediaSource(defaultDataSourceFactory, uri, mediaSourceEventListener);
+                mediaSource = createHlsMediaSource(defaultDataSourceFactory, uri);
                 break;
             case H264:
-                mediaSource = createH264MediaSource(defaultDataSourceFactory, uri, mediaSourceEventListener);
+                mediaSource = createH264MediaSource(defaultDataSourceFactory, uri);
                 break;
             case DASH:
-                mediaSource = createDashMediaSource(defaultDataSourceFactory, uri, mediaSourceEventListener);
+                mediaSource = createDashMediaSource(defaultDataSourceFactory, uri);
                 break;
             default:
                 throw new UnsupportedOperationException("Content type: " + options + " is not supported.");
         }
-
-        concatenatingMediaSource.addMediaSource(mediaSource);
-        return concatenatingMediaSource;
+        mediaSource.addEventListener(handler, mediaSourceEventListener);
+        return mediaSource;
     }
 
     private MediaSource createHlsMediaSource(DefaultDataSourceFactory defaultDataSourceFactory,
-                                             Uri uri,
-                                             MediaSourceEventListener mediaSourceEventListener) {
+                                             Uri uri) {
         HlsMediaSource.Factory factory = new HlsMediaSource.Factory(defaultDataSourceFactory);
-        HlsMediaSource hlsMediaSource = factory.createMediaSource(uri);
-        hlsMediaSource.addEventListener(handler, mediaSourceEventListener);
-        return hlsMediaSource;
+        return factory.createMediaSource(uri);
     }
 
     private MediaSource createH264MediaSource(DefaultDataSourceFactory defaultDataSourceFactory,
-                                              Uri uri,
-                                              MediaSourceEventListener mediaSourceEventListener) {
+                                              Uri uri) {
         ExtractorMediaSource.Factory factory = new ExtractorMediaSource.Factory(defaultDataSourceFactory);
-        ExtractorMediaSource extractorMediaSource = factory
+        return factory
                 .setExtractorsFactory(new DefaultExtractorsFactory())
                 .createMediaSource(uri);
-        extractorMediaSource.addEventListener(handler, mediaSourceEventListener);
-        return extractorMediaSource;
     }
 
     private MediaSource createDashMediaSource(DefaultDataSourceFactory defaultDataSourceFactory,
-                                              Uri uri,
-                                              MediaSourceEventListener mediaSourceEventListener) {
+                                              Uri uri) {
         DefaultDashChunkSource.Factory chunkSourceFactory = new DefaultDashChunkSource.Factory(defaultDataSourceFactory);
         DashMediaSource.Factory factory = new DashMediaSource.Factory(chunkSourceFactory, defaultDataSourceFactory);
-        DashMediaSource mediaSource = factory.createMediaSource(uri);
-        mediaSource.addEventListener(handler, mediaSourceEventListener);
-        return mediaSource;
+        return factory.createMediaSource(uri);
     }
 }
