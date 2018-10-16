@@ -233,6 +233,8 @@ public interface NoPlayer extends PlayerState {
 
         PlayerErrorType type();
 
+        DetailErrorType detailType();
+
         String message();
     }
 

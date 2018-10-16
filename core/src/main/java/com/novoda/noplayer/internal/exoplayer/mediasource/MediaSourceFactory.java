@@ -12,18 +12,22 @@ import com.google.android.exoplayer2.source.MediaSourceEventListener;
 import com.google.android.exoplayer2.source.dash.DashMediaSource;
 import com.google.android.exoplayer2.source.dash.DefaultDashChunkSource;
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
+import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.novoda.noplayer.Options;
+import com.novoda.noplayer.internal.utils.Optional;
 
 public class MediaSourceFactory {
 
     private final Context context;
     private final Handler handler;
+    private final Optional<DataSource.Factory> dataSourceFactory;
 
-    public MediaSourceFactory(Context context, Handler handler) {
+    public MediaSourceFactory(Context context, Handler handler, Optional<DataSource.Factory> dataSourceFactory) {
         this.context = context;
         this.handler = handler;
+        this.dataSourceFactory = dataSourceFactory;
     }
 
     public ConcatenatingMediaSource createConcatenatingMediaSource(Options options,
@@ -40,8 +44,7 @@ public class MediaSourceFactory {
                               Uri uri,
                               MediaSourceEventListener mediaSourceEventListener,
                               DefaultBandwidthMeter bandwidthMeter) {
-        DefaultDataSourceFactory defaultDataSourceFactory = new DefaultDataSourceFactory(context, "user-agent", bandwidthMeter);
-
+        DefaultDataSourceFactory defaultDataSourceFactory = createDataSourceFactory(bandwidthMeter);
         MediaSource mediaSource;
         switch (options.contentType()) {
             case HLS:
@@ -58,6 +61,14 @@ public class MediaSourceFactory {
         }
         mediaSource.addEventListener(handler, mediaSourceEventListener);
         return mediaSource;
+    }
+
+    private DefaultDataSourceFactory createDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
+        if (dataSourceFactory.isPresent()) {
+            return new DefaultDataSourceFactory(context, bandwidthMeter, dataSourceFactory.get());
+        } else {
+            return new DefaultDataSourceFactory(context, "user-agent", bandwidthMeter);
+        }
     }
 
     private MediaSource createHlsMediaSource(DefaultDataSourceFactory defaultDataSourceFactory,
