@@ -37,7 +37,7 @@ public final class NoPlayerLog {
         return String.format(Locale.US,
                 DETAILED_LOG_TEMPLATE,
                 current.getName(),
-                filename.substring(0, filename.length() - CLASS_SUFFIX),
+                (filename!=null?filename.substring(0, filename.length() - CLASS_SUFFIX):filename),
                 trace.getMethodName(),
                 trace.getLineNumber(),
                 message);
